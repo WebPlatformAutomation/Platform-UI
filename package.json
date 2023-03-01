@@ -1,0 +1,59 @@
+{
+  "name": "platform-ui-automation",
+  "version": "0.0.1",
+  "description": "UI Test Automation Framework for Web Platform",
+  "scripts": {
+    "build-local": "babel src --out-dir lib && babel common --out-dir lib/common && babel run.js --out-dir lib && cp node_run.js lib/",
+    "prepublishOnly": "rm -rf lib && npm run build-local"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WebPlatformAutomation/Platform-UI.git"
+  },
+  "author": "James Tsay",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/WebPlatformAutomation/Platform-UI/issues"
+  },
+  "homepage": "https://github.com/WebPlatformAutomation/Platform-UI#readme",
+  "bin": {
+    "run": "lib/node_run.js"
+  },
+  "files": [
+    "lib/"
+  ],
+  "dependencies": {
+    "@cucumber/cucumber": "^8.9.1",
+    "@serenity-js/assertions": "^3.0.0-rc.32",
+    "@serenity-js/console-reporter": "^3.0.0-rc.32",
+    "@serenity-js/core": "^3.0.0-rc.32",
+    "@serenity-js/cucumber": "^3.0.0-rc.32",
+    "@serenity-js/playwright": "^3.0.0-rc.32",
+    "@serenity-js/rest": "^3.0.0-rc.32",
+    "@serenity-js/serenity-bdd": "^3.0.0-rc.32",
+    "@serenity-js/web": "^3.0.0-rc.32",
+    "is-ci": "^3.0.1",
+    "node-fetch": "^2.6.9",
+    "node-html-parser": "^6.1.4",
+    "playwright": "^1.26.1",
+    "rimraf": "^3.0.2",
+    "url-join": "^4.0.1",
+    "xml-js": "^1.6.11",
+    "yargs": "^17.7.1",
+    "polytype": "^0.14.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.21.0",
+    "@babel/core": "7.20.5",
+    "@babel/eslint-parser": "7.19.1",
+    "@babel/preset-env": "7.20.2",
+    "@babel/register": "^7.18.9",
+    "eslint": "8.11.0",
+    "eslint-config-airbnb-base": "15.0.0",
+    "eslint-plugin-import": "2.25.4",
+    "npm-failsafe": "^0.4.3",
+    "stylelint": "14.6.0",
+    "stylelint-config-prettier": "9.0.3",
+    "stylelint-config-standard": "25.0.0"
+  }
+}

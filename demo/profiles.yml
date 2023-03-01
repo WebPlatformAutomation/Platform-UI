@@ -1,0 +1,10 @@
+---
+default: -p prod -b chromium --headless false
+
+prod: 
+  baseUrl: http://www.adobe.com
+
+stage:
+  baseUrl: http://www.stage.adobe.com
+
+
