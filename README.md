@@ -76,3 +76,14 @@ If the page under test is `example` and the test script is in `example-test`.
 ```
 npx run test -g example
 ``` 
+
+## Command Line Options
+
+| Option | Alias | Description |
+| -- | -- | -- |
+| --profile  | -p | Environment profile |
+| --tags     | -t | Scenario tags for selection of tests |
+| --browser  | -b | Browser choice from Playwright's supported browsers | 
+| --headless | -h | Use the headless mode |
+| --pages    | -g | Get test scenarios from the page's test page. To test multiple pages, use a comma to separate values. |
+| --features | -f | Get test scenarios from the features's test page. To test multiple features, use a comma to separate values. |
