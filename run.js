@@ -34,9 +34,20 @@ function getProfile(args) {
 
 function verifyBrowser(profile) {
   // Verify some arguments
-  if (!/^(chromium|firefox|webkit)$/.test(profile.browser)) {
-    console.log(`Can't run on the browser "${profile.browser}"`);
-    console.log(`Use a supported browser only: chromium, firefox, and webkit.`);
+  const supportedBrowsers = [
+    'chromium',
+    'firefox',
+    'webkit',
+    'chrome',
+    'chrome-beta',
+    'chrome-dev',
+    'msedge',
+    'msedge-beta',
+    'msedge-dev'
+  ];
+  if (!supportedBrowsers.includes(profile.browser)) {
+    console.log(`The browser "${profile.browser}" is not supported.`);
+    console.log(`Use a supported browser: ${supportedBrowsers.join(', ')}`);
     exit(1);
   }
 }
@@ -189,25 +200,16 @@ function getGitCurrentBranch() {
   return res.stdout.toString().trim();
 }
 
-async function prepareFeatureFiles() {
-  let testBaseUrl = '';
-  if (profiles.origin) {
-    if (profile.testBaseUrl) {
-      testBaseUrl = profile.testBaseUrl;
-    } else if (profiles.origin.testBaseUrl) {
-      testBaseUrl = profiles.origin.testBaseUrl;
-    } else {
-      testBaseUrl = profiles.origin.baseUrl;
-    }
-  }
+async function prepareFeatureFiles(profile) {
+  let testBaseUrl = profile.testBaseurl || profile.baseUrl;
 
   let features = profile.features && profile.features.split(',');
   let pages = profile.pages;
 
-  let featureSiteDir = path.join('features', 'site');
+  let featureSiteDir = path.join(profile.site, 'features', 'site');
   fs.rmSync(featureSiteDir, { recursive: true, force: true });
 
-  if (features) {
+  if (profile.features) {
     global.features = {};
     let testFeatures = findFeaturePages(testBaseUrl, features);
     for (let testFeature of testFeatures) {
@@ -218,7 +220,7 @@ async function prepareFeatureFiles() {
       global.features[featureFile] = testFeature;
       console.log(featureFile);
     }
-  } else if (pages) {
+  } else if (profile.pages) {
     let testPages = [];
     if (pages === true) {
       let links = await getSiteUrls(testBaseUrl);
@@ -258,15 +260,18 @@ async function startCucumber({ argv, userConfig }) {
     runConfiguration.sources.paths = Object.keys(global.features);
   }
   if (global.config.profile.tags) {
-    runConfiguration.sources.tagExpression = global.config.profile.tags;
+    runConfiguration.sources.tagExpression = `${global.config.profile.tags} and not @wip`;
+  } else {
+    runConfiguration.sources.tagExpression = 'not @wip';
   }
 
   let site = global.config.profile.site;
 
   runConfiguration.formats.stdout = '@serenity-js/cucumber';
-  runConfiguration.sources.paths = [
-    `${site}/features/**/*.{feature,feature.md}`
-  ];
+  runConfiguration.sources.paths = [`${site}/**/*.{feature,feature.md}`];
+  if (global.features) {
+    runConfiguration.sources.paths = [`${site}/features/site/**/*.feature`];
+  }
   runConfiguration.support.requireModules = ['@babel/register'];
   runConfiguration.support.requirePaths = [
     'src/serenity/*.js',
@@ -330,6 +335,10 @@ async function main() {
   global.config = {
     profile
   };
+
+  if (profile.pages || profile.features) {
+    await prepareFeatureFiles(profile);
+  }
 
   let argvCucumber = [process.argv[0], process.argv[1]];
 

@@ -39,8 +39,14 @@ BeforeAll(async () => {
     ? TakePhotosOfInteractions
     : TakePhotosOfFailures;
 
+  let channel = '';
+  if (/^(chrome|msedge)/.test(browserOption)) {
+    channel = browserOption;
+    browserOption = 'chromium';  
+  }
+  
   browser = await playwright[browserOption].launch({
-    headless
+    headless, channel
   });
 
   // Configure Serenity/JS

@@ -12,6 +12,10 @@ import {
 } from '@serenity-js/web';
 import { Ensure, equals, includes } from '@serenity-js/assertions';
 
+Then(/^I go to this page$/, async function () {
+  await actorCalled('I').attemptsTo(Navigate.to(this.parameters.pageUrl));
+});
+
 Then(/^I go to "([^\"]*)"$/, async function (path) {
   path = path.trim();
   await actorCalled('I').attemptsTo(Navigate.to(path));
