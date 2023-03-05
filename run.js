@@ -285,6 +285,8 @@ async function startCucumber({ argv, userConfig }) {
     'common/**/*.js',
     `${site}/**/*.js`
   ];
+  
+  // Add self to requirePaths
   if (fs.existsSync(path.resolve(__dirname, '..', 'package.json'))) {
     let packageName = require('../package.json').name;
     let node_module_paths = [
@@ -297,6 +299,17 @@ async function startCucumber({ argv, userConfig }) {
       }
     }
   }
+
+  // Add platform-ui-lib-* to requirePaths
+  const libPath = path.resolve(__dirname, '..', '..');
+  const puiLibs = fs.readdirSync(libPath).filter(fn => fn.startsWith('platform-ui-lib-'));
+  for (const lib of puiLibs) {
+    const p = path.resolve(libPath, lib, 'lib');
+    if (fs.existsSync(p)) {
+      runConfiguration.support.requirePaths.push(`node_modules/${lib}/lib/**/*.js`);
+    }
+  }
+
   const { success } = await runCucumber(runConfiguration);
 
   return success;
