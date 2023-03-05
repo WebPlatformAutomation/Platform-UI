@@ -32,7 +32,7 @@ let browser = null;
 setDefaultTimeout(timeouts.cucumber.step.inMilliseconds());
 
 BeforeAll(async () => {
-  let browserOption = global.config.profile.browser;
+  let browserType = global.config.profile.browser;
   let headless = global.config.profile.headless;
   let baseURL = global.config.profile.baseUrl;
   let photoTakingStrategy = global.config.profile.screenshotInteractions
@@ -40,18 +40,35 @@ BeforeAll(async () => {
     : TakePhotosOfFailures;
 
   let channel = '';
-  if (/^(chrome|msedge)/.test(browserOption)) {
-    channel = browserOption;
-    browserOption = 'chromium';  
+  if (/^(chrome|msedge)/.test(browserType)) {
+    channel = browserType;
+    browserType = 'chromium';
   }
-  
-  browser = await playwright[browserOption].launch({
-    headless, channel
+  browser = await playwright[browserType].launch({
+    headless,
+    channel
   });
+
+  let browserOptions = global.config.browserOptions?.[browserType] || {};
+
+  // Chromium browser identifies itself "HeadlessChrome" in headless mode
+  // Some websites don't like HeadlessChrome
+  if (global.config.profile.noHeadlessUserAgent && browserType === 'chromium') {
+    const context = await browser.browserType().launch();
+    const page = await context.newPage();
+    const userAgent = await page.evaluate(() => {
+      return navigator.userAgent;
+    });
+    context.close();
+    browserOptions.userAgent = userAgent.replace(/Headless/i, '');
+    console.log(`Default UserAgent: ${userAgent}`);
+    console.log(`Custom UserAgent: ${browserOptions.userAgent}`);
+  }
 
   // Configure Serenity/JS
   configure({
     actors: new Actors(browser, {
+      ...browserOptions,
       baseURL,
       defaultNavigationTimeout:
         timeouts.playwright.defaultNavigationTimeout.inMilliseconds(),

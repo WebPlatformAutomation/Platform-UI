@@ -12,6 +12,13 @@ const { loadConfiguration, runCucumber } = require('@cucumber/cucumber/api');
 const { ArgvParser } = require('@cucumber/cucumber/lib/configuration/index');
 const { exit } = require('process');
 
+function getBrowserOptions(args) {
+  let optionsPath = path.join(args._[0], 'browser.options.yml');
+  if (fs.existsSync(optionsPath)) {
+    return yaml.load(fs.readFileSync(optionsPath));    
+  }
+}
+
 function getProfile(args) {
   let profilePath = path.join(args._[0], 'profiles.yml');
 
@@ -333,7 +340,8 @@ async function main() {
   }
 
   global.config = {
-    profile
+    profile,
+    browserOptions: getBrowserOptions(args)
   };
 
   if (profile.pages || profile.features) {
