@@ -106,6 +106,6 @@ function sleep(ms) {
 
 AfterStep(async function (options) {
   if (global.config.profile.stepPause) {
-    await sleep(global.config.profile.stepPause);
+    await sleep(global.config.profile.stepPause*1000);
   }
 });
