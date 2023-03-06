@@ -67,7 +67,6 @@ prod:
 | ^I (should\|wait to) see "([^\"]*)" in the address bar$ |
 | ^I (should\|wait to) see the address bar contains "([^\"]*)"$ |
 | ^I (should\|wait to) see "([^\"]*)" in the page content$ |
-| 
 
 ## Use Test Scripts in Content
 
