@@ -1,6 +1,6 @@
 {
   "name": "platform-ui-automation",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "UI Test Automation Framework for Web Platform",
   "scripts": {
     "build-local": "babel src --out-dir lib && babel common --out-dir lib/common && babel run.js --out-dir lib && cp node_run.js lib/",
