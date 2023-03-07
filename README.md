@@ -86,3 +86,7 @@ npx run test -g example
 | --headless | -h | Use the headless mode |
 | --pages    | -g | Get test scenarios from the page's test page. To test multiple pages, use a comma to separate values. |
 | --features | -f | Get test scenarios from the features's test page. To test multiple features, use a comma to separate values. |
+
+## Step Definition Library
+
+Installed NPM modules with the name starting with "platform-ui-lib-" will be loaded as a step definition library. For example, you can build an NPM package with the name "platform-ui-lib-mywebsite" and it has the step definitioins in the `lib` folder. The path will be added to Cucumber's require paths.
