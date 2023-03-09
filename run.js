@@ -15,7 +15,7 @@ const { exit } = require('process');
 function getBrowserOptions(args) {
   let optionsPath = path.join(args._[0], 'browser.options.yml');
   if (fs.existsSync(optionsPath)) {
-    return yaml.load(fs.readFileSync(optionsPath));    
+    return yaml.load(fs.readFileSync(optionsPath));
   }
 }
 
@@ -35,6 +35,11 @@ function getProfile(args) {
   }
 
   let profile = profiles[args.profile];
+
+  if (!profile) {
+    console.log(`No profile "${args.profile}"`);
+    exit(1);
+  }
 
   return { ...profile, ...args };
 }
@@ -285,7 +290,7 @@ async function startCucumber({ argv, userConfig }) {
     'common/**/*.js',
     `${site}/**/*.js`
   ];
-  
+
   // Add self to requirePaths
   if (fs.existsSync(path.resolve(__dirname, '..', 'package.json'))) {
     let packageName = require('../package.json').name;
@@ -302,11 +307,15 @@ async function startCucumber({ argv, userConfig }) {
 
   // Add platform-ui-lib-* to requirePaths
   const libPath = path.resolve(__dirname, '..', '..');
-  const puiLibs = fs.readdirSync(libPath).filter(fn => fn.startsWith('platform-ui-lib-'));
+  const puiLibs = fs
+    .readdirSync(libPath)
+    .filter(fn => fn.startsWith('platform-ui-lib-'));
   for (const lib of puiLibs) {
     const p = path.resolve(libPath, lib, 'lib');
     if (fs.existsSync(p)) {
-      runConfiguration.support.requirePaths.push(`node_modules/${lib}/lib/**/*.js`);
+      runConfiguration.support.requirePaths.push(
+        `node_modules/${lib}/lib/**/*.js`
+      );
     }
   }
 
@@ -363,7 +372,9 @@ async function main() {
 
   let argvCucumber = [process.argv[0], process.argv[1]];
 
-  await startCucumber({ argv: argvCucumber });
+  const { success } = await startCucumber({ argv: argvCucumber });
+
+  return success ? 0 : 1;
 }
 
 main();

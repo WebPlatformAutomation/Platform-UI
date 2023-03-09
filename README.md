@@ -89,4 +89,8 @@ npx run test -g example
 
 ## Step Definition Library
 
-Installed NPM modules with the name starting with "platform-ui-lib-" will be loaded as a step definition library. For example, you can build an NPM package with the name "platform-ui-lib-mywebsite" and it has the step definitioins in the `lib` folder. The path will be added to Cucumber's require paths.
+Installed NPM modules with the name starting with "platform-ui-lib-" will be loaded as a step definition library. For example, you can build an NPM package with the name "platform-ui-lib-mywebsite" and it has the step definitioins in the `lib` folder. The path will be added to Cucumber's require paths. See [this demo project](https://github.com/WebPlatformAutomation/Platform-UI-SauceDemo)
+
+## Page Object Support
+
+See the sample page objects in [this demo project](https://github.com/WebPlatformAutomation/Platform-UI-SauceDemo)
