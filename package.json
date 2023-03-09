@@ -1,6 +1,6 @@
 {
   "name": "platform-ui-automation",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "UI Test Automation Framework for Web Platform",
   "scripts": {
     "build-local": "babel src --out-dir lib && babel common --out-dir lib/common && babel run.js --out-dir lib && cp node_run.js lib/",
@@ -33,6 +33,7 @@
     "@serenity-js/serenity-bdd": "^3.0.0-rc.32",
     "@serenity-js/web": "^3.0.0-rc.32",
     "is-ci": "^3.0.1",
+    "js-yaml": "^4.1.0",
     "node-fetch": "^2.6.9",
     "node-html-parser": "^6.1.4",
     "playwright": "^1.26.1",
